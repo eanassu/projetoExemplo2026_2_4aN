@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 import 'dart:ui' as ui;
+import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:share_plus/share_plus.dart' show Share, XFile;
@@ -91,10 +92,26 @@ class DrawingScreenState extends State<DrawingScreen> {
       );
       break;
       // ======================================================================
-      // OPÇÃO C: Gravar direto na Galeria do celular (Pacote: gal)
+      // OPÇÃO C: Gravar direto na Galeria do celular/desktop ou baixar na Web
       // ======================================================================
       case 3:
-      await Gal.putImageBytes(pngBytes, name: 'desenho_flutter');
+        if (kIsWeb) {
+          // Na Web, faz o download direto do arquivo pelo navegador
+          final xFile = XFile.fromData(
+            pngBytes,
+            mimeType: 'image/png',
+            name: 'desenho_flutter.png',
+          );
+          await xFile.saveTo('');
+        } else {
+          // No Android, iOS, macOS e Windows, salva na Galeria/Imagens
+          await Gal.putImageBytes(pngBytes, name: 'desenho_flutter');
+        }
+        if (!mounted) return;
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Imagem salva com sucesso!')),
+        );
+        break;
       }
     } catch (e) {
       debugPrint('Erro ao gerar imagem: $e');
