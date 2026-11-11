@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:projeto/chat_screen.dart';
 import 'package:projeto/desenho.dart';
 import 'package:projeto/map_screen.dart';
 import 'package:projeto/tip_calculator.dart';
@@ -129,6 +130,17 @@ class _MyHomePageState extends State<MyHomePage> {
               },
               child: const Text('Ir para Mapa'),
             ),
+            ElevatedButton(
+              onPressed: () {
+                // Navega para a Tela de Chat 
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const ChatScreen()),
+                );
+              },
+              child: const Text('Ir para Chat'),
+            ),
+
           ],
         ),
       ),
